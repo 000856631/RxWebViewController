@@ -90,6 +90,9 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     self.webView.delegate = nil;
+    if (self.timer) {
+        [self.timer invalidate];
+    }
 }
 
 
@@ -299,7 +302,9 @@
     self.progressView.progress = 0;
     self.progressView.hidden = false;
     self.loading = YES;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCallback) userInfo:nil repeats:YES];
+    if (!self.timer) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCallback) userInfo:nil repeats:YES];
+    }
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
